@@ -15,6 +15,11 @@ const GameServerApi = (() => {
                 return reject(new Error("Server IP is not set."));
             }
 
+            // Ensure the command starts with a "/"
+            if (!command.startsWith("/")) {
+                command = `/${command}`;
+            }
+
             const xhr = new XMLHttpRequest();
             xhr.open("POST", `http://${serverIp}:5001/command`, true); // Add port 5001
             xhr.setRequestHeader("Content-Type", "application/json");
