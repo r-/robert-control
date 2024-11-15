@@ -17,36 +17,78 @@ $server_ip = $_SERVER['SERVER_ADDR'];
     </div>
     <div class="control-section">
         <h1>R.O.B.E.R.T - Control Center</h1>
-        <p>Use the arrow keys or buttons below to control the motor, and press Spacebar or the "Shoot" button to shoot:</p>
+        <p>Use the arrow keys or buttons below to control the motor, and press Spacebar or the "Activate" button to interact with a target:</p>
         <div class="controls">
-            <button id="forward" onclick="RobotApi.sendMotorCommand('move_forward', 'start')">Forward</button>
-            <button id="backward" onclick="RobotApi.sendMotorCommand('move_backward', 'start')">Backward</button>
-            <button id="left" onclick="RobotApi.sendMotorCommand('move_left', 'start')">Left</button>
-            <button id="right" onclick="RobotApi.sendMotorCommand('move_right', 'start')">Right</button>
-            <button id="stop" onclick="RobotApi.sendMotorCommand('', 'stop')">Stop</button>
-            <button id="shoot" onclick="RobotApi.shoot('player1', 'player2')">Shoot</button>
+            <button id="forward" onclick="handleCommand('move_forward', 'start')">Forward</button>
+            <button id="backward" onclick="handleCommand('move_backward', 'start')">Backward</button>
+            <button id="left" onclick="handleCommand('move_left', 'start')">Left</button>
+            <button id="right" onclick="handleCommand('move_right', 'start')">Right</button>
+            <button id="stop" onclick="handleCommand('', 'stop')">Stop</button>
+            <button id="activate" onclick="handleActivate()">Activate</button>
         </div>
         <div class="terminal" id="terminal">
             <!-- Terminal output will appear here -->
         </div>
         <div class="input-container">
             <input type="text" id="command-input" placeholder="Enter a command (e.g., /login <server_ip> <player_id>)" />
-            <button id="send-command">Send</button>
+            <button id="send-command" onclick="handleSendCommand()">Send</button>
         </div>
     </div>
 
     <script>
         const server_ip = "<?php echo $server_ip; ?>"; // Default server IP
-    </script>
-    <script src="js/api/robotApi.js"></script>
-    <script src="js/api/gameServerApi.js"></script>
-    <script src="js/ui/userControls.js"></script>
-    <script src="js/ui/terminal.js"></script>
-    <script>
+
+        /**
+         * Handles motor commands by calling RobotApi.sendMotorCommand
+         * @param {string} command - The command to send (e.g., 'move_forward').
+         * @param {string} action - The action to perform (e.g., 'start' or 'stop').
+         */
+        function handleCommand(command, action) {
+            console.log(`Sending motor command: ${command}, action: ${action}`);
+            RobotApi.sendMotorCommand(command, action);
+        }
+
+        /**
+         * Handles activation by calling RobotApi.activate
+         */
+        function handleActivate() {
+            console.log("Sending activation request...");
+            RobotApi.activate();
+        }
+
+        /**
+         * Handles manual command input for the game server.
+         */
+        function handleSendCommand() {
+            const commandInput = document.getElementById('command-input');
+            const command = commandInput.value.trim();
+
+            if (command) {
+                console.log(`Sending game server command: ${command}`);
+                GameServerApi.sendCommand(command)
+                    .then(response => {
+                        console.log("Game server response:", response);
+                        Terminal.log(`Server: ${response.message}`);
+                    })
+                    .catch(error => {
+                        console.error("Failed to send command to game server:", error);
+                        Terminal.log(`Error: ${error.message}`);
+                    });
+            } else {
+                console.warn("No command entered.");
+                Terminal.log("Please enter a command.");
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             UserControls.bindRobotControls();
             Terminal.bindTerminalEvents();
         });
     </script>
+    <script src="js/api/robotApi.js"></script>
+    <script src="js/api/gameServerApi.js"></script>
+    <script src="js/ui/userControls.js"></script>
+    <script src="js/ui/terminal.js"></script>
+    <script src="js/ui/gamepad.js"></script>
 </body>
 </html>
