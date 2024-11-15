@@ -2,10 +2,10 @@ const UserControls = (() => {
     let activeKeys = {};
 
     const bindRobotControls = () => {
-        // Keyboard controls
         document.addEventListener("keydown", (event) => {
             if (!activeKeys[event.key]) {
                 activeKeys[event.key] = true;
+                console.log(`Key pressed: ${event.key}`); // Debug log
                 switch (event.key) {
                     case "ArrowUp":
                         RobotApi.sendMotorCommand("move_forward", "start");
@@ -20,7 +20,7 @@ const UserControls = (() => {
                         RobotApi.sendMotorCommand("move_right", "start");
                         break;
                     case " ":
-                        RobotApi.shoot("player1", "player2");
+                        RobotApi.activate();
                         break;
                 }
             }
@@ -29,7 +29,15 @@ const UserControls = (() => {
         document.addEventListener("keyup", (event) => {
             if (activeKeys[event.key]) {
                 delete activeKeys[event.key];
-                RobotApi.sendMotorCommand("", "stop");
+                console.log(`Key released: ${event.key}`); // Debug log
+                switch (event.key) {
+                    case "ArrowUp":
+                    case "ArrowDown":
+                    case "ArrowLeft":
+                    case "ArrowRight":
+                        RobotApi.sendMotorCommand("", "stop");
+                        break;
+                }
             }
         });
     };
