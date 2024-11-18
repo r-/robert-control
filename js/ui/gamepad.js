@@ -74,35 +74,31 @@ class GamepadController {
     }
 
     handleJoystickInput(x, y) {
-        const commands = [];
-
-        // Detect joystick movement
-        if (y < -this.axisThreshold) commands.push('move_forward');
-        if (y > this.axisThreshold) commands.push('move_backward');
-        if (x < -this.axisThreshold) commands.push('move_left');
-        if (x > this.axisThreshold) commands.push('move_right');
-
-        // Avoid duplicate commands
-        commands.forEach((command) => {
-            if (!this.lastCommands[command]) {
-                console.log(`Joystick command: ${command}`);
-                RobotApi.sendMotorCommand(command, 'start');
-                this.lastCommands[command] = true;
-            }
+        // Normalize joystick values to be in the range of -1 to 1
+        const normalizedX = Math.max(-1, Math.min(1, x));
+        const normalizedY = Math.max(-1, Math.min(1, y));
+    
+        // Calculate motor speeds based on joystick inputs
+        const speedLeft = normalizedY + normalizedX;
+        const speedRight = normalizedY - normalizedX;
+    
+        // Scale motor speeds to be in a range suitable for your motors
+        const maxSpeed = 100; // Assuming speed range is -100 to 100
+        const leftMotorSpeed = Math.max(-maxSpeed, Math.min(maxSpeed, speedLeft * maxSpeed));
+        const rightMotorSpeed = Math.max(-maxSpeed, Math.min(maxSpeed, speedRight * maxSpeed));
+    
+        // Send motor speeds to the robot using RobotApi
+        RobotApi.sendMotorCommand({
+            left: leftMotorSpeed,
+            right: rightMotorSpeed
         });
-
-        // Stop commands that are no longer active
-        Object.keys(this.lastCommands).forEach((command) => {
-            if (!commands.includes(command)) {
-                console.log(`Stopping command: ${command}`);
-                RobotApi.sendMotorCommand(command, 'stop');
-                delete this.lastCommands[command];
-            }
-        });
-
-        // Update joystick state to prevent unnecessary updates
+    
+        // Log the motor speeds for debugging
+        console.log(`Left Motor Speed: ${leftMotorSpeed}, Right Motor Speed: ${rightMotorSpeed}`);
+    
+        // Update the last joystick state
         this.lastJoystickState = { x, y };
-    }
+    }    
 }
 
 document.addEventListener('DOMContentLoaded', () => {
