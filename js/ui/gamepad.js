@@ -98,7 +98,7 @@ class GamepadController {
         });
     
         // Log the motor speeds for debugging
-        console.log(`Left Motor Speed: ${leftMotorSpeed}, Right Motor Speed: ${rightMotorSpeed}`);
+        console.log(`Left Motor Speed: ${speedLeft}, Right Motor Speed: ${speedRight}`);
     
         // Update the last joystick state
         this.lastJoystickState = { x, y };
