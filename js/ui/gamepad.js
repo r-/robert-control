@@ -83,13 +83,13 @@ class GamepadController {
         const speedLeft = normalizedY - normalizedX;
         const speedRight = normalizedY + normalizedX;
 
-        if (max(abs(speedLeft), abs(speedRight)) > 1){
-            speedLeft /= max(abs(speedLeft), abs(speedRight))
-            speedRight /= max(abs(speedLeft), abs(speedRight))
+        if (Math.max(Math.abs(speedLeft), math.abs(speedRight)) > 1){
+            speedLeft /= Math.max(Math.abs(speedLeft), Math.abs(speedRight))
+            speedRight /= Math.max(Math.abs(speedLeft), Math.abs(speedRight))
         }
     
-        speedLeft = max(-1, min(1, speedLeft))
-        speedRight = max(-1, min(1, speedRight))
+        speedLeft = Math.max(-1, Math.min(1, speedLeft))
+        speedRight = Math.max(-1, Math.min(1, speedRight))
 
         // Send motor speeds to the robot using RobotApi
         RobotApi.sendMotorCommand({
