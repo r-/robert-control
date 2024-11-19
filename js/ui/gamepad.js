@@ -83,7 +83,7 @@ class GamepadController {
         const speedRight = normalizedY - normalizedX;
     
         // Scale motor speeds to be in a range suitable for your motors
-        const maxSpeed = 100; // Assuming speed range is -100 to 100
+        const maxSpeed = 1; // Assuming speed range is -1 to 1
         const leftMotorSpeed = Math.max(-maxSpeed, Math.min(maxSpeed, speedLeft * maxSpeed));
         const rightMotorSpeed = Math.max(-maxSpeed, Math.min(maxSpeed, speedRight * maxSpeed));
     
