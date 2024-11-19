@@ -80,8 +80,8 @@ class GamepadController {
         const normalizedY = Math.max(-1, Math.min(1, y));
     
         // Calculate motor speeds based on joystick inputs
-        const speedLeft = normalizedY - normalizedX;
-        const speedRight = normalizedY + normalizedX;
+        let speedLeft = normalizedY - normalizedX;
+        let speedRight = normalizedY + normalizedX;
 
         if (Math.max(Math.abs(speedLeft), Math.abs(speedRight)) > 1){
             speedLeft /= Math.max(Math.abs(speedLeft), Math.abs(speedRight))
