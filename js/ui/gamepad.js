@@ -83,7 +83,7 @@ class GamepadController {
         const speedLeft = normalizedY - normalizedX;
         const speedRight = normalizedY + normalizedX;
 
-        if (Math.max(Math.abs(speedLeft), math.abs(speedRight)) > 1){
+        if (Math.max(Math.abs(speedLeft), Math.abs(speedRight)) > 1){
             speedLeft /= Math.max(Math.abs(speedLeft), Math.abs(speedRight))
             speedRight /= Math.max(Math.abs(speedLeft), Math.abs(speedRight))
         }
