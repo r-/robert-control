@@ -56,8 +56,11 @@ class GamepadController {
 
             // Handle joystick movement
             const [leftX, leftY] = gamepad.axes.slice(0, 2);
-            this.handleJoystickInput(leftX, leftY);
-            console.log(leftX, leftY)
+            if (Math.abs(leftX) > 0.1, Math.abs(leftY) > 0.1){
+                this.handleJoystickInput(leftX, leftY);
+                console.log(leftX, leftY)
+            }
+            setTimeout(50)
         });
     }
 
