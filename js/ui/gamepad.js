@@ -57,6 +57,7 @@ class GamepadController {
             // Handle joystick movement
             const [leftX, leftY] = gamepad.axes.slice(0, 2);
             this.handleJoystickInput(leftX, leftY);
+            console.log(leftX, leftY)
         });
     }
 
@@ -79,18 +80,21 @@ class GamepadController {
         const normalizedY = Math.max(-1, Math.min(1, y));
     
         // Calculate motor speeds based on joystick inputs
-        const speedLeft = normalizedY + normalizedX;
-        const speedRight = normalizedY - normalizedX;
+        const speedLeft = normalizedY - normalizedX;
+        const speedRight = normalizedY + normalizedX;
+
+        if (max(abs(speedLeft), abs(speedRight)) > 1){
+            speedLeft /= max(abs(speedLeft), abs(speedRight))
+            speedRight /= max(abs(speedLeft), abs(speedRight))
+        }
     
-        // Scale motor speeds to be in a range suitable for your motors
-        const maxSpeed = 1; // Assuming speed range is -1 to 1
-        const leftMotorSpeed = Math.max(-maxSpeed, Math.min(maxSpeed, speedLeft * maxSpeed));
-        const rightMotorSpeed = Math.max(-maxSpeed, Math.min(maxSpeed, speedRight * maxSpeed));
-    
+        speedLeft = max(-1, min(1, speedLeft))
+        speedRight = max(-1, min(1, speedRight))
+
         // Send motor speeds to the robot using RobotApi
         RobotApi.sendMotorCommand({
-            left: leftMotorSpeed,
-            right: rightMotorSpeed
+            left: speedLeft,
+            right: speedRight
         });
     
         // Log the motor speeds for debugging
