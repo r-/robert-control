@@ -1,13 +1,13 @@
 class GamepadController {
     constructor() {
         this.gamepads = [];
-        this.buttonMappings = {
-            activate: 1, // 'A' button is usually index 0 on most controllers
-        };
-        this.axisThreshold = 0.5; // Threshold for detecting movement on joysticks
-        this.lastButtonStates = {}; // Track the last state of each button
-        this.lastJoystickState = { x: 0, y: 0 }; // Track the last joystick state
-        this.lastCommands = {}; // Track last active commands
+        this.neutralThreshold = 0.2; // Threshold for joystick neutral position
+        this.pollInterval = 100; // Interval (in ms) for reading joystick input
+        this.changeThreshold = 0.2; // Minimum change required to send a new command
+        this.smoothingFactor = 0.2; // Factor to smooth snapped signals
+        this.lastAxes = { x: 0, y: 0 }; // Last processed axes values
+        this.lastMotorState = { left: 0, right: 0 }; // Last sent motor state
+        this.analogController = true; // Assume analog until detected otherwise
         this.init();
     }
 
@@ -18,22 +18,21 @@ class GamepadController {
     }
 
     onGamepadConnected(event) {
-        console.log(`Gamepad connected: ${event.gamepad.id}`);
+        console.log(`🎮 Gamepad connected: ${event.gamepad.id}`);
+        console.log("💡 If the robot does not move smoothly, ensure the gamepad is in **analog mode**.");
         this.gamepads[event.gamepad.index] = event.gamepad;
     }
 
     onGamepadDisconnected(event) {
-        console.log(`Gamepad disconnected: ${event.gamepad.id}`);
+        console.log(`❌ Gamepad disconnected: ${event.gamepad.id}`);
         delete this.gamepads[event.gamepad.index];
     }
 
     startPolling() {
-        const poll = () => {
+        setInterval(() => {
             this.updateGamepads();
             this.handleInput();
-            requestAnimationFrame(poll);
-        };
-        poll();
+        }, this.pollInterval);
     }
 
     updateGamepads() {
@@ -43,69 +42,89 @@ class GamepadController {
 
     handleInput() {
         this.gamepads.forEach((gamepad) => {
-            // Handle button presses and releases
-            gamepad.buttons.forEach((button, index) => {
-                const wasPressed = this.lastButtonStates[index] || false;
-                if (button.pressed && !wasPressed) {
-                    this.handleButtonPress(index);
-                } else if (!button.pressed && wasPressed) {
-                    this.handleButtonRelease(index);
+            const rawX = gamepad.axes[0];
+            const rawY = gamepad.axes[1];
+
+            // Detect analog or digital mode
+            this.detectAnalogSupport(gamepad);
+
+            // Apply smoothing if controller does not support analog input
+            const processedX = this.analogController ? rawX : this.smoothValue(rawX, this.lastAxes.x);
+            const processedY = this.analogController ? rawY : this.smoothValue(rawY, this.lastAxes.y);
+
+            // Update last processed axes
+            this.lastAxes = { x: processedX, y: processedY };
+
+            // Normalize joystick values (apply dead zone)
+            const normalizedX = Math.abs(processedX) > this.neutralThreshold ? processedX : 0;
+            const normalizedY = Math.abs(processedY) > this.neutralThreshold ? processedY : 0;
+
+            // Calculate motor speeds
+            const speedLeft = normalizedY - normalizedX;
+            const speedRight = normalizedY + normalizedX;
+
+            // Ensure speeds are within the range [-1, 1]
+            const clampedLeft = Math.max(-1, Math.min(1, speedLeft));
+            const clampedRight = Math.max(-1, Math.min(1, speedRight));
+
+            // Send command if speeds have changed significantly
+            this.sendMotorCommandIfChanged(clampedLeft, clampedRight);
+        });
+    }
+
+    detectAnalogSupport(gamepad) {
+        // Check if all axes report either -1, 0, or 1
+        const isSnapped = gamepad.axes.every((axis) => axis === -1 || axis === 0 || axis === 1);
+
+        if (isSnapped && this.analogController) {
+            console.warn(
+                `⚠️ Warning: Gamepad "${gamepad.id}" appears to be in digital mode. Switch to **analog mode** for smooth control.`
+            );
+            this.analogController = false;
+        } else if (!isSnapped && !this.analogController) {
+            console.log(`🎉 Gamepad "${gamepad.id}" detected in analog mode.`);
+            this.analogController = true;
+        }
+    }
+
+    smoothValue(rawValue, lastValue) {
+        return lastValue + (rawValue - lastValue) * this.smoothingFactor;
+    }
+
+    sendMotorCommandIfChanged(left, right) {
+        const changeLeft = Math.abs(left - this.lastMotorState.left);
+        const changeRight = Math.abs(right - this.lastMotorState.right);
+
+        if (changeLeft > this.changeThreshold || changeRight > this.changeThreshold) {
+            // Send the motor command to the Flask server
+            this.sendMotorCommand(left, right);
+
+            // Update the last motor state
+            this.lastMotorState = { left, right };
+
+            console.log(`🚀 Motor Command Sent: Left=${left.toFixed(2)}, Right=${right.toFixed(2)}`);
+        }
+    }
+
+    sendMotorCommand(left, right) {
+        const motorSpeeds = { left, right };
+
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", `http://${server_ip}:5000/control_motor`, true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    console.log("✅ Flask Server Response:", JSON.parse(xhr.responseText));
+                } else {
+                    console.error(`❌ Motor API Error: ${xhr.status} - ${xhr.statusText}`);
                 }
-                this.lastButtonStates[index] = button.pressed;
-            });
-
-            // Handle joystick movement
-            const [leftX, leftY] = gamepad.axes.slice(0, 2);
-            if (Math.abs(leftX) > 0.1, Math.abs(leftY) > 0.1){
-                this.handleJoystickInput(leftX, leftY);
-                console.log(leftX, leftY)
             }
-            setTimeout(50)
-        });
+        };
+
+        xhr.send(JSON.stringify(motorSpeeds));
     }
-
-    handleButtonPress(buttonIndex) {
-        if (buttonIndex === this.buttonMappings.activate) {
-            console.log(`Button pressed: Activate`);
-            RobotApi.activate();
-        }
-    }
-
-    handleButtonRelease(buttonIndex) {
-        if (buttonIndex === this.buttonMappings.activate) {
-            console.log(`Button released: Activate`);
-        }
-    }
-
-    handleJoystickInput(x, y) {
-        // Normalize joystick values to be in the range of -1 to 1
-        const normalizedX = Math.max(-1, Math.min(1, x));
-        const normalizedY = Math.max(-1, Math.min(1, y));
-    
-        // Calculate motor speeds based on joystick inputs
-        let speedLeft = normalizedY - normalizedX;
-        let speedRight = normalizedY + normalizedX;
-
-        if (Math.max(Math.abs(speedLeft), Math.abs(speedRight)) > 1){
-            speedLeft /= Math.max(Math.abs(speedLeft), Math.abs(speedRight))
-            speedRight /= Math.max(Math.abs(speedLeft), Math.abs(speedRight))
-        }
-    
-        speedLeft = Math.max(-1, Math.min(1, speedLeft))
-        speedRight = Math.max(-1, Math.min(1, speedRight))
-
-        // Send motor speeds to the robot using RobotApi
-        RobotApi.sendMotorCommand({
-            left: speedLeft,
-            right: speedRight
-        });
-    
-        // Log the motor speeds for debugging
-        console.log(`Left Motor Speed: ${speedLeft}, Right Motor Speed: ${speedRight}`);
-    
-        // Update the last joystick state
-        this.lastJoystickState = { x, y };
-    }    
 }
 
 document.addEventListener('DOMContentLoaded', () => {
