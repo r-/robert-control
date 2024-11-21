@@ -97,7 +97,7 @@ class GamepadController {
 
         if (changeLeft > this.changeThreshold || changeRight > this.changeThreshold) {
             // Send the motor command to the Flask server
-            this.sendMotorCommand(left, right);
+            RobotApi.sendMotorCommand(left, right);
 
             // Update the last motor state
             this.lastMotorState = { left, right };
@@ -105,7 +105,8 @@ class GamepadController {
             console.log(`🚀 Motor Command Sent: Left=${left.toFixed(2)}, Right=${right.toFixed(2)}`);
         }
     }
-
+    /*
+    //Used the already implemented api instead in robotApi
     sendMotorCommand(left, right) {
         const motorSpeeds = { left, right };
 
@@ -125,6 +126,7 @@ class GamepadController {
 
         xhr.send(JSON.stringify(motorSpeeds));
     }
+    */
 }
 
 document.addEventListener('DOMContentLoaded', () => {

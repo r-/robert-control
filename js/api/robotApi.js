@@ -35,5 +35,9 @@ const RobotApi = (() => {
         xhr.send(data);
     };
 
-    return { sendMotorCommand };
+    const activate = () => {
+
+    }
+
+    return { sendMotorCommand, activate };
 })();
