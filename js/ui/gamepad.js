@@ -60,8 +60,8 @@ class GamepadController {
             const normalizedY = Math.abs(processedY) > this.neutralThreshold ? processedY : 0;
 
             // Calculate motor speeds
-            const speedLeft = normalizedY - normalizedX;
-            const speedRight = normalizedY + normalizedX;
+            const speedLeft = normalizedY + normalizedX;
+            const speedRight = normalizedY - normalizedX;
 
             // Ensure speeds are within the range [-1, 1]
             const clampedLeft = Math.max(-1, Math.min(1, speedLeft));
