@@ -5,10 +5,10 @@ const RobotApi = (() => {
      */
     const sendMotorCommand = (motorSpeeds) => {
         // Validate the input
-        if (!motorSpeeds || typeof motorSpeeds !== 'object') {
+        /*if (!motorSpeeds || typeof motorSpeeds !== 'object') {
             console.error("Invalid motor speeds: must be an object with 'left' and 'right' properties.");
             return;
-        }
+        }*/
 
         const { left, right } = motorSpeeds;
 
