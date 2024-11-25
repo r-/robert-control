@@ -44,6 +44,7 @@ class GamepadController {
         this.gamepads.forEach((gamepad) => {
             const rawX = gamepad.axes[0];
             const rawY = gamepad.axes[1];
+            console.log("raw: " , rawX , rawY)
 
             // Detect analog or digital mode
             this.detectAnalogSupport(gamepad);
@@ -60,8 +61,8 @@ class GamepadController {
             const normalizedY = Math.abs(processedY) > this.neutralThreshold ? processedY : 0;
 
             // Calculate motor speeds
-            const speedLeft = normalizedY + normalizedX;
-            const speedRight = normalizedY - normalizedX;
+            const speedLeft = normalizedY - normalizedX; //cange operator if turn is inveted
+            const speedRight = normalizedY + normalizedX; // change operator if turn is inverted
 
             // Ensure speeds are within the range [-1, 1]
             const clampedLeft = Math.max(-1, Math.min(1, speedLeft));
