@@ -1,10 +1,10 @@
 class GamepadController {
     constructor() {
         this.gamepads = [];
-        this.neutralThreshold = 0.2; // Threshold for joystick neutral position
-        this.pollInterval = 100; // Interval (in ms) for reading joystick input
-        this.changeThreshold = 0.2; // Minimum change required to send a new command
-        this.smoothingFactor = 0.2; // Factor to smooth snapped signals
+        this.neutralThreshold = 0.1; // Threshold for joystick neutral position
+        this.pollInterval = 20; // Interval (in ms) for reading joystick input
+        this.changeThreshold = 0.1; // Minimum change required to send a new command
+        this.smoothingFactor = 0.1; // Factor to smooth snapped signals
         this.lastAxes = { x: 0, y: 0 }; // Last processed axes values
         this.lastMotorState = { left: 0, right: 0 }; // Last sent motor state
         this.analogController = true; // Assume analog until detected otherwise
