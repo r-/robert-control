@@ -3,17 +3,10 @@ const RobotApi = (() => {
      * Sends motor speed commands to the robot server.
      * @param {Object} motorSpeeds - An object containing motor speeds for "left" and "right".
      */
-    const sendMotorCommand = (motorSpeeds) => {
-        // Validate the input
-        /*if (!motorSpeeds || typeof motorSpeeds !== 'object') {
-            console.error("Invalid motor speeds: must be an object with 'left' and 'right' properties.");
-            return;
-        }*/
-
-        const { left, right } = motorSpeeds;
+    const sendMotorCommand = (left, right) => {
 
         // Log the motor speeds being sent
-        console.log("Sending motor speeds:", motorSpeeds);
+        console.log("Sending motor speeds:", left, right);
 
         // Prepare the request payload
         const data = JSON.stringify({ left, right });
