@@ -96,7 +96,7 @@ class GamepadController {
         const changeLeft = Math.abs(left - this.lastMotorState.left);
         const changeRight = Math.abs(right - this.lastMotorState.right);
 
-        if (changeLeft > this.changeThreshold || changeRight > this.changeThreshold) {
+        if (/*changeLeft > this.changeThreshold || changeRight > this.changeThreshold*/ true) {
             // Send the motor command to the Flask server
             RobotApi.sendMotorCommand(left, right);
 
