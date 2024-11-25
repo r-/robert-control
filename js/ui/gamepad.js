@@ -3,7 +3,7 @@ class GamepadController {
         this.gamepads = [];
         this.neutralThreshold = 0.1; // Threshold for joystick neutral position
         this.pollInterval = 20; // Interval (in ms) for reading joystick input
-        this.changeThreshold = 0.1; // Minimum change required to send a new command
+        this.changeThreshold = 0.01; // Minimum change required to send a new command
         this.smoothingFactor = 0.1; // Factor to smooth snapped signals
         this.lastAxes = { x: 0, y: 0 }; // Last processed axes values
         this.lastMotorState = { left: 0, right: 0 }; // Last sent motor state
@@ -96,7 +96,7 @@ class GamepadController {
         const changeLeft = Math.abs(left - this.lastMotorState.left);
         const changeRight = Math.abs(right - this.lastMotorState.right);
 
-        if (/*changeLeft > this.changeThreshold || changeRight > this.changeThreshold*/ true) {
+        if (changeLeft > this.changeThreshold || changeRight > this.changeThreshold) {
             // Send the motor command to the Flask server
             RobotApi.sendMotorCommand(left, right);
 
