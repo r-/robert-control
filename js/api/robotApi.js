@@ -59,7 +59,7 @@ const RobotApi = (() => {
 
         xhr.send();
 
-        console.log(target_id)
+        console.log("targetid", target_id)
         
 
         setTimeout(() => {
