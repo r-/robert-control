@@ -31,7 +31,7 @@ const RobotApi = (() => {
 
     activateDelay = 500 // Delay (in ms) before activate command can be used again
     cooldown = false // Assume the activate isn't on delay
-    target_id = none
+    target_id = null
 
     const activate = () => {
         if (cooldown){
@@ -58,7 +58,7 @@ const RobotApi = (() => {
 
         xhr.send();
 
-        target_id
+        target_id 
         
 
         setTimeout(() => {
