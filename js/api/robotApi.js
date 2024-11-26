@@ -52,6 +52,7 @@ const RobotApi = (() => {
                     console.log("Activate status:", JSON.parse(xhr.responseText));
                     target_id = JSON.parse(xhr.responseText).target_id
                     console.log("in place id", target_id)
+                    GameServerApi.sendCommand(`/activate ${target_id}`)
                 } else {
                     console.error(`Activate error: ${xhr.status} - ${xhr.statusText}`);
                 }
@@ -59,9 +60,6 @@ const RobotApi = (() => {
         };
 
         xhr.send();
-
-        console.log("targetid", target_id)
-        
 
         setTimeout(() => {
             cooldown = false
