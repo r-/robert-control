@@ -38,10 +38,24 @@ const RobotApi = (() => {
         }
         cooldown = true
 
-    document.querySelector('.video-container').style.border = "5px solid #b30000";
+        document.querySelector('.video-container').style.border = "5px solid #b30000";
 
-    console.log("Activated")
+        console.log("Activated")
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", `http://${server_ip}:5000/activate`, true);
+        xhr.setRequestHeader("Content-Type", "application/json");
 
+        xhr.onreadystatechange = () => {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    console.log("Activate status:", JSON.parse(xhr.responseText));
+                } else {
+                    console.error(`Activate error: ${xhr.status} - ${xhr.statusText}`);
+                }
+            }
+        };
+
+        xhr.send();
         
 
         setTimeout(() => {
