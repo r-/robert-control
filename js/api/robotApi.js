@@ -30,8 +30,7 @@ const RobotApi = (() => {
 
 
     activateDelay = 500 // Delay (in ms) before activate command can be used again
-    cooldown = false // Assume the activate isn't on delay
-    target_id = "none"
+    target_id = null
 
     const activate = () => {
         if (document.querySelector('.video-container').style.border == "5px solid #b30000"){
@@ -56,7 +55,7 @@ const RobotApi = (() => {
 
         xhr.send();
 
-        target_id = JSON.parse(xhr.responseText).target_id
+        target_id
         console.log("target id:", target_id)
         
 
