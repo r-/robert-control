@@ -28,6 +28,7 @@ const GameServerApi = (() => {
                 if (xhr.readyState === 4) {
                     if (xhr.status === 200) {
                         const response = JSON.parse(xhr.responseText);
+                        console.log(response)
                         if (response.status === "success") {
                             resolve(response);
                         } else {
