@@ -1,0 +1,7 @@
+const infobox = (() => {
+
+    startHpUpdate(id){
+
+    }
+
+})

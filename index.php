@@ -33,7 +33,7 @@ $server_ip = $_SERVER['SERVER_ADDR'];
             <input type="text" id="command-input" placeholder="Enter a command (e.g., /login <server_ip> <player_id>)" />
             <button id="send-command" onclick="handleSendCommand()">Send</button>
         </div>
-        <div id="hp-container">
+        <div class="hp-container">
             <label for="hp-bar">Health Points:</label>
             <progress id="hp-bar" value="100" max="100"></progress>
             <span id="hp-text">100/100</span>
@@ -90,7 +90,8 @@ $server_ip = $_SERVER['SERVER_ADDR'];
             UserControls.bindRobotControls();
             Terminal.bindTerminalEvents();
         });
-        
+
+        /*
         function updateHP(currentHP, maxHP) {
         const hpBar = document.getElementById('hp-bar');
         const hpText = document.getElementById('hp-text');
@@ -112,8 +113,9 @@ $server_ip = $_SERVER['SERVER_ADDR'];
 
         // Call periodically
         setInterval(fetchHP, 1000);
-
+*/
     </script>
+    <script>src="js/ui/infobox.js"</script>
     <script src="js/api/robotApi.js"></script>
     <script src="js/api/gameServerApi.js"></script>
     <script src="js/ui/userControls.js"></script>
