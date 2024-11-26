@@ -38,12 +38,15 @@ const RobotApi = (() => {
         }
         cooldown = true
 
-    document.querySelector('.video-container').style.boder = " #b30000";
+    document.querySelector('.video-container').style.border = "5px solid #b30000";
+
+    console.log("Activated")
 
         
 
         setTimeout(() => {
             cooldown = false
+            document.querySelector('.video-container').style.border = "5px solid #ddd"
         }, activateDelay)
     }
 
