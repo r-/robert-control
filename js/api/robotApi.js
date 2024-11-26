@@ -58,7 +58,8 @@ const RobotApi = (() => {
 
         xhr.send();
 
-        target_id 
+        target_id = JSON.parse(xhr.responseText)
+        console.log(target_id)
         
 
         setTimeout(() => {
