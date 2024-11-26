@@ -17,7 +17,7 @@ $server_ip = $_SERVER['SERVER_ADDR'];
     </div>
     <div class="control-section">
         <h1>R.O.B.E.R.T - Control Center</h1>
-        <p>Use the arrow keys or buttons below to control the motor, and press Spacebar or the "Activate" button to interact with a target:</p>
+        <p>Use the controller to control the motor, and press the R2 button to interact with a target:</p>
         <div class="controls">
             <button id="forward" onclick="handleCommand('1', '1')">Forward</button>
             <button id="backward" onclick="handleCommand('-1', '-1')">Backward</button>
@@ -33,6 +33,12 @@ $server_ip = $_SERVER['SERVER_ADDR'];
             <input type="text" id="command-input" placeholder="Enter a command (e.g., /login <server_ip> <player_id>)" />
             <button id="send-command" onclick="handleSendCommand()">Send</button>
         </div>
+        <div id="hp-container">
+            <label for="hp-bar">Health Points:</label>
+            <progress id="hp-bar" value="100" max="100"></progress>
+            <span id="hp-text">100/100</span>
+        </div>
+
     </div>
 
     <script>
@@ -84,6 +90,29 @@ $server_ip = $_SERVER['SERVER_ADDR'];
             UserControls.bindRobotControls();
             Terminal.bindTerminalEvents();
         });
+        
+        function updateHP(currentHP, maxHP) {
+        const hpBar = document.getElementById('hp-bar');
+        const hpText = document.getElementById('hp-text');
+
+        hpBar.value = currentHP;
+        hpBar.max = maxHP;
+        hpText.textContent = `${currentHP}/${maxHP}`;
+        }
+
+        async function fetchHP() {
+            try {
+                const response = await fetch('/api/get_hp'); // Replace with your API endpoint
+                const data = await response.json();
+                updateHP(data.currentHP, data.maxHP);
+            } catch (error) {
+                console.error('Error fetching HP:', error);
+            }
+        }
+
+        // Call periodically
+        setInterval(fetchHP, 1000);
+
     </script>
     <script src="js/api/robotApi.js"></script>
     <script src="js/api/gameServerApi.js"></script>
