@@ -33,10 +33,10 @@ const RobotApi = (() => {
     target_id = null
 
     const activate = () => {
-        if (getComputedStyle(document.querySelector('.video-container')).borderColor === "#b30000"){
+        if (getComputedStyle(document.querySelector('.video-container')).borderColor === "red"){
             return
         }
-        document.querySelector('.video-container').style.border = "5px solid #b30000";
+        document.querySelector('.video-container').style.border = "5px solid red";
 
         console.log("Activated")
         const xhr = new XMLHttpRequest();
