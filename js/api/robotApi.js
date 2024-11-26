@@ -29,14 +29,17 @@ const RobotApi = (() => {
     };
 
 
-    activateDelay = 2000 // Delay (in ms) before activate command can be used again
-    target_id = null
+    activateDelay = 500 // Delay (in ms) before activate command can be used again
+    cooldown = false // Assume the activate isn't on delay
+    target_id = none
 
     const activate = () => {
-        if (getComputedStyle(document.querySelector('.video-container')).borderColor === "red"){
+        if (cooldown){
             return
         }
-        document.querySelector('.video-container').style.border = "5px solid red";
+        cooldown = true
+
+        document.querySelector('.video-container').style.border = "5px solid #b30000";
 
         console.log("Activated")
         const xhr = new XMLHttpRequest();
@@ -55,11 +58,11 @@ const RobotApi = (() => {
 
         xhr.send();
 
-        target_id
-        console.log("target id:", target_id)
+        target_id = 
         
 
         setTimeout(() => {
+            cooldown = false
             document.querySelector('.video-container').style.border = "5px solid #ddd"
         }, activateDelay)
     }
