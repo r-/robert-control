@@ -29,7 +29,7 @@ const RobotApi = (() => {
     };
 
 
-    activateDelay = 500 // Delay (in ms) before activate command can be used again
+    activateDelay = 2000 // Delay (in ms) before activate command can be used again
     target_id = null
 
     const activate = () => {
