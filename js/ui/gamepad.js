@@ -31,7 +31,8 @@ class GamepadController {
     startPolling() {
         setInterval(() => {
             this.updateGamepads();
-            this.handleInput();
+            this.handleJoystickInput();
+            this.handleButtonInput();
         }, this.pollInterval);
     }
 
@@ -40,7 +41,7 @@ class GamepadController {
         this.gamepads = Array.from(gamepads).filter((gp) => gp !== null);
     }
 
-    handleInput() {
+    handleJoystickInput() {
         this.gamepads.forEach((gamepad) => {
             const rawX = gamepad.axes[0];
             const rawY = gamepad.axes[1];
@@ -106,6 +107,15 @@ class GamepadController {
             console.log(`🚀 Motor Command Sent: Left=${left.toFixed(2)}, Right=${right.toFixed(2)}`);
         }
     }
+
+    handleButtonInput(){
+        this.gamepads.forEach((gamepad) => {
+            if (gamepad.axes[5] > 0.8){
+                RobotApi.activate()
+            }
+        })
+    }
+
     /*
     //Used the already implemented api instead in robotApi
     sendMotorCommand(left, right) {

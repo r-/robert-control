@@ -8,16 +8,16 @@ const UserControls = (() => {
                 console.log(`Key pressed: ${event.key}`); // Debug log
                 switch (event.key) {
                     case "ArrowUp":
-                        RobotApi.sendMotorCommand("move_forward", "start");
+                        RobotApi.sendMotorCommand("1", "1");
                         break;
                     case "ArrowDown":
-                        RobotApi.sendMotorCommand("move_backward", "start");
+                        RobotApi.sendMotorCommand("-1", "-1");
                         break;
                     case "ArrowLeft":
-                        RobotApi.sendMotorCommand("move_left", "start");
+                        RobotApi.sendMotorCommand("-1", "1");
                         break;
                     case "ArrowRight":
-                        RobotApi.sendMotorCommand("move_right", "start");
+                        RobotApi.sendMotorCommand("1", "-1");
                         break;
                     case " ":
                         RobotApi.activate();
@@ -35,7 +35,7 @@ const UserControls = (() => {
                     case "ArrowDown":
                     case "ArrowLeft":
                     case "ArrowRight":
-                        RobotApi.sendMotorCommand("", "stop");
+                        RobotApi.sendMotorCommand("0", "0");
                         break;
                 }
             }

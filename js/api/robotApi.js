@@ -28,8 +28,23 @@ const RobotApi = (() => {
         xhr.send(data);
     };
 
-    const activate = () => {
 
+    activateDelay = 500 // Delay (in ms) before activate command can be used again
+    cooldown = false // Assume the activate isn't on delay
+
+    const activate = () => {
+        if (cooldown){
+            return
+        }
+        cooldown = true
+
+    document.querySelector('.video-container').style.boder = " #b30000";
+
+        
+
+        setTimeout(() => {
+            cooldown = false
+        }, activateDelay)
     }
 
     return { sendMotorCommand, activate };

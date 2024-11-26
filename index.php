@@ -19,11 +19,11 @@ $server_ip = $_SERVER['SERVER_ADDR'];
         <h1>R.O.B.E.R.T - Control Center</h1>
         <p>Use the arrow keys or buttons below to control the motor, and press Spacebar or the "Activate" button to interact with a target:</p>
         <div class="controls">
-            <button id="forward" onclick="handleCommand('move_forward', 'start')">Forward</button>
-            <button id="backward" onclick="handleCommand('move_backward', 'start')">Backward</button>
-            <button id="left" onclick="handleCommand('move_left', 'start')">Left</button>
-            <button id="right" onclick="handleCommand('move_right', 'start')">Right</button>
-            <button id="stop" onclick="handleCommand('', 'stop')">Stop</button>
+            <button id="forward" onclick="handleCommand('1', '1')">Forward</button>
+            <button id="backward" onclick="handleCommand('-1', '-1')">Backward</button>
+            <button id="left" onclick="handleCommand('1', '-1')">Left</button>
+            <button id="right" onclick="handleCommand('-1', '1')">Right</button>
+            <button id="stop" onclick="handleCommand('0', '0')">Stop</button>
             <button id="activate" onclick="handleActivate()">Activate</button>
         </div>
         <div class="terminal" id="terminal">
@@ -43,9 +43,9 @@ $server_ip = $_SERVER['SERVER_ADDR'];
          * @param {string} command - The command to send (e.g., 'move_forward').
          * @param {string} action - The action to perform (e.g., 'start' or 'stop').
          */
-        function handleCommand(command, action) {
-            console.log(`Sending motor command: ${command}, action: ${action}`);
-            RobotApi.sendMotorCommand(command, action);
+        function handleCommand(left, right) {
+            console.log(`Sending motor command: ${left}, ${right}`);
+            RobotApi.sendMotorCommand(left, right);
         }
 
         /**
