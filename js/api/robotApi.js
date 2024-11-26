@@ -50,7 +50,7 @@ const RobotApi = (() => {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
                     console.log("Activate status:", JSON.parse(xhr.responseText));
-                    target_id = JSON.parse(xhr.responseText)
+                    target_id = JSON.parse(xhr.responseText).target_id
                 } else {
                     console.error(`Activate error: ${xhr.status} - ${xhr.statusText}`);
                 }
