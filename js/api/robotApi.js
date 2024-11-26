@@ -31,7 +31,7 @@ const RobotApi = (() => {
 
     activateDelay = 500 // Delay (in ms) before activate command can be used again
     cooldown = false // Assume the activate isn't on delay
-    target_id = none
+    target_id = "none"
 
     const activate = () => {
         if (document.querySelector('.video-container').style.border == "5px solid #b30000"){
