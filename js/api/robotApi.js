@@ -33,7 +33,7 @@ const RobotApi = (() => {
     target_id = null
 
     const activate = () => {
-        if (document.querySelector('.video-container').style.border == "5px solid #b30000"){
+        if (getComputedStyle(document.querySelector('.video-container')).borderColor === "#b30000"){
             return
         }
         document.querySelector('.video-container').style.border = "5px solid #b30000";
