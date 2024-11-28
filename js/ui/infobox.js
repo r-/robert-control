@@ -1,16 +1,12 @@
 const infobox = (() => {
 
     function updateHpBar() {
+        console.log("updateHpBar called")
         // Send a POST request to the Flask server
-        fetch('http://192.168.1.33:5001/command', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ command: '/hp' }) // Send the /hp command
-        })
+        data = GameServerApi.sendCommand(`/hp`)
         .then(response => response.json())
         .then(data => {
+            console.log("updateHpBar recieved information")
             if (data.status === "success") {
                 // Get the player's current health from the response
                 const health = data.player.health;
