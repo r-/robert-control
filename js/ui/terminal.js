@@ -18,7 +18,7 @@ const Terminal = (() => {
                 .then((response) => logToTerminal(response.message)) // Log the greeting message
                 .catch((error) => logToTerminal(`Error: ${error.message}`));
             logToTerminal(`Connecting to server at ${serverIp}...`);
-            infobox.startHpBar()
+            Infobox.startHpBar()
         } else if (serverIp) {
             GameServerApi.sendCommand(input)
                 .then((response) => logToTerminal(response.message))
