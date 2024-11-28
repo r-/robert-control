@@ -33,7 +33,10 @@ const infobox = (() => {
     }
     
     // Call the update function periodically, e.g., every second
-    setInterval(updateHpBar, 1000);
+    function startHpBar() {
+        setInterval(updateHpBar, 1000);
+    }
     
+    return (startHpBar)
 
 })
