@@ -4,7 +4,6 @@ const Infobox = (() => {
         console.log("updateHpBar called")
         // Send a POST request to the Flask server
         data = GameServerApi.sendCommand(`/hp`)
-        .then(response => response.json())
         .then(data => {
             console.log("updateHpBar recieved information")
             if (data.status === "success") {
