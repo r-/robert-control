@@ -36,7 +36,7 @@ $server_ip = $_SERVER['SERVER_ADDR'];
         <div class="hp-container">
             <label for="hp-bar">Health Points:</label>
             <progress id="hp-bar" value="100" max="100"></progress>
-            <span id="hp-text">100/100</span>
+            <span id="hp-text">10/10</span>
         </div>
 
     </div>
