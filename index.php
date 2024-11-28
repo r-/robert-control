@@ -115,7 +115,7 @@ $server_ip = $_SERVER['SERVER_ADDR'];
         setInterval(fetchHP, 1000);
 */
     </script>
-    <script>src="js/ui/infobox.js"</script>
+    <script src="js/ui/infobox.js"></script>
     <script src="js/api/robotApi.js"></script>
     <script src="js/api/gameServerApi.js"></script>
     <script src="js/ui/userControls.js"></script>
