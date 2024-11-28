@@ -1,4 +1,4 @@
-const infobox = (() => {
+const Infobox = (() => {
 
     function updateHpBar() {
         console.log("updateHpBar called")
@@ -34,6 +34,6 @@ const infobox = (() => {
         setInterval(updateHpBar, 1000);
     }
     
-    return (startHpBar)
+    return {startHpBar};
 
-})()
+})();
