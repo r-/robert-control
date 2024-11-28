@@ -1,6 +1,6 @@
 const Infobox = (() => {
 
-    function updateHpBar() {
+    const updateHpBar = () => {
         console.log("updateHpBar called")
         // Send a POST request to the Flask server
         data = GameServerApi.sendCommand(`/hp`)
