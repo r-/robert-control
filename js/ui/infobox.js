@@ -36,4 +36,4 @@ const infobox = (() => {
     
     return (startHpBar)
 
-})
+})()
